@@ -3,9 +3,11 @@
 
 #define PI 3.14159265
 
+
+
 typedef struct{
-	float x;
-	float y;
+	double x;
+	double y;
 }coordenada;
 
 typedef struct {
@@ -15,30 +17,46 @@ typedef struct {
 	coordenada l; 
    } quadrado;
 
-double pitagoras(double x, double y){
-	return sqrt((x*x) + (y*y));
-} 
+
+
+double calcDeterminante(coordenada c1, coordenada c2, coordenada c3){
+	double resultado;
+
+	resultado = (c1.x*c2.y) + (c1.y*c3.x) + (c2.x*c3.y) -
+	 ((c1.y*c2.x) + (c1.x*c3.y) + (c2.y*c3.x));
+
+	return resultado;
+}
+
 
 int eConvexo(quadrado quad){
-	/*double fatorDeConversao = 180.0 / PI;
 	double resultado = 0;
-	double temp1 = 0;
-	double temp2 = 0;
-	temp1 = quad.i.x*quad.j.x + quad.i.y*quad.j.y;
-	temp2 = pitagoras(quad.i.x,quad.j.x)*pitagoras(quad.i.y, quad.j.y);
-	resultado = acos(temp1/temp2) * fatorDeConversao;
-	printf("%lf\n",resultado);*/
-	return 1;
+	double determinante;
+
+	determinante = calcDeterminante(quad.i,quad.j,quad.k);
+	if(determinante < 0)
+		resultado = 1;
+	determinante = calcDeterminante(quad.j,quad.k,quad.l);
+	if(determinante < 0)
+		resultado = 1;
+	determinante = calcDeterminante(quad.k,quad.l,quad.i);
+	if(determinante < 0)
+		resultado = 1;
+	determinante = calcDeterminante(quad.l,quad.i,quad.j);
+	if(determinante < 0)
+		resultado = 1;
+
+	return resultado;
 }
 
 int main(){
 	quadrado q;
-	scanf("%f%f",&q.i.x, &q.i.y);
-	scanf("%f%f",&q.j.x, &q.j.y);
-	scanf("%f%f",&q.k.x, &q.k.y);
-	scanf("%f%f",&q.l.x, &q.l.y);
+	scanf("%lf%lf",&q.i.x, &q.i.y);
+	scanf("%lf%lf",&q.j.x, &q.j.y);
+	scanf("%lf%lf",&q.k.x, &q.k.y);
+	scanf("%lf%lf",&q.l.x, &q.l.y);
 
-	if(eConvexo(q) == 1){
+	if(eConvexo(q) == 0){
 		printf("É convexo\n");
 	}else{
 		printf("Não é convexo\n");
