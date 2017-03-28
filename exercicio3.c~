@@ -81,10 +81,9 @@ int main (int argc, char *argv[]) {
         if(i<0) break;
         insere_final(cabecalho, i);
     }
-    printf("%s\n",argv[1]);
+    printf("%s\n",argv[1])
     bubbleSort(cabecalho,1);
     imprime_lista(cabecalho);
     printf("\n");
     free (cabecalho);
 } /* fim-main */
-
