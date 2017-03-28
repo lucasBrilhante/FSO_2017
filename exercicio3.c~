@@ -10,6 +10,7 @@ typedef struct _cab {
     struct _no  *head;
     struct _no  *tail;
 } cab;
+
 void imprime_lista(cab *cabecalho) {
     no  *p;
      
@@ -26,67 +27,7 @@ void imprime_lista(cab *cabecalho) {
     }
     printf("\n");
 }
- 
-/*void insere_inicio(cab *cabecalho) {
-    no  *novo;
-    int n,char c;
-    printf("Digite N: ");
-    scanf("%c%d", &c,&n);
-     
-    novo = (no *) malloc(sizeof(no));
-    novo->letra = c;
-    novo->num = n;
-    novo->prox   = cabecalho->head;
-    novo->back   = NULL;
-    cabecalho->head = novo;
- 
-    if (cabecalho->tail == NULL) {
-        cabecalho->tail = novo;
-    }
-    imprime_cab(cabecalho);
-     
-} 
- 
- 
 
- 
-void remove_elemento(cab *cabecalho) {
-    no *p;
-    int n; 
-    char c;
-     
-    printf("Digite N a ser excluido : ");
-    scanf("%c %d", &c,&n);
-    p = cabecalho->head;
-    while (p != NULL) {
-        if ((p->letra == c)||(p-> num == n));  {
-            p -> back ->prox = p->prox;
-            p -> prox ->back = p->back;
-            free(p);
-            p = cabecalho->tail;
-        } 
-        p = p->prox;
-    } 
-    imprime_cab(cabecalho);
-} 
- 
-no busca(int x,char n,*cabecalho){
-    no *p;
-    p=cabecalho ->head;
-    while(p!=NULL){
-        if(p -> letra == x,p->num == c){  
-            return p;
-            p = NULL;       
-        }   
-    }
-}*/
-/* no busca2(int x,no *p){
-    if(p==NULL)
-        return(p);
-        else if(p->letra,num == x)
-            return(p);
-    return(busca2(x,p->prox));
-}*/
 void insere_final(cab *cabecalho, int i) {
     no  *novo;
     int n;
@@ -106,19 +47,42 @@ void insere_final(cab *cabecalho, int i) {
 
 } 
 
-int main (void) {
+void bubbleSort(cab *cabecalho,int flag){
+    no *p = cabecalho->head;
+    no *q = cabecalho->head->prox;
+    int temp;
+    while(p != NULL){
+        no *q = p->prox;
+        while(q != NULL){
+            if(q->num > p->num){
+                temp = q -> num;
+                q -> num = p-> num;
+                p-> num = temp;
+            }
+            q = q-> prox;
+        }
+        p = p->prox;
+    }
+    
+    
+}
+int main (int argc, char *argv[]) {
     cab *cabecalho;
 
     int n;
-    int i;
+    int i = 0;
      
     cabecalho = (cab *) malloc(sizeof(cab));
     cabecalho->head = NULL;
     cabecalho->tail = NULL;
     
-    for(i = 0; i<10 ; i++){
+    while(1){
+        scanf("%d",&i);
+        if(i<0) break;
         insere_final(cabecalho, i);
     }
+    printf("%s\n",argv[1])
+    bubbleSort(cabecalho,1);
     imprime_lista(cabecalho);
     printf("\n");
     free (cabecalho);
