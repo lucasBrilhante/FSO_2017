@@ -1,3 +1,5 @@
+#include "estruturas.h"
+#include "func.h"
 double calcDeterminante(coordenada c1, coordenada c2, coordenada c3){
 	double resultado;
 
