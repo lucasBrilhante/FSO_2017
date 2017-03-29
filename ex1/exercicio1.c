@@ -1,21 +1,11 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "estruturas.h"
+#include "func.h"
+
 #define PI 3.14159265
 
-
-
-typedef struct{
-	double x;
-	double y;
-}coordenada;
-
-typedef struct {
-	coordenada i;
-	coordenada j;
-	coordenada k;
-	coordenada l; 
-   } quadrado;
 
 
 

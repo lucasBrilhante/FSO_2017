@@ -47,17 +47,25 @@ void insere_final(cab *cabecalho, int i) {
 
 } 
 
-void bubbleSort(cab *cabecalho,int flag){
+void bubbleSort(cab *cabecalho,char flag){
     no *p = cabecalho->head;
     no *q = cabecalho->head->prox;
     int temp;
     while(p != NULL){
         no *q = p->prox;
         while(q != NULL){
-            if(q->num > p->num){
-                temp = q -> num;
-                q -> num = p-> num;
-                p-> num = temp;
+            if(flag == 'r'){
+                if((q->num > p->num )){
+                    temp = q -> num;
+                    q -> num = p-> num;
+                    p-> num = temp;
+                }
+            }else{
+                if((q->num < p->num)){
+                    temp = q -> num;
+                    q -> num = p-> num;
+                    p-> num = temp;
+                }
             }
             q = q-> prox;
         }
@@ -69,7 +77,7 @@ void bubbleSort(cab *cabecalho,int flag){
 int main (int argc, char *argv[]) {
     cab *cabecalho;
 
-    int n;
+    char c;
     int i = 0;
      
     cabecalho = (cab *) malloc(sizeof(cab));
@@ -81,10 +89,14 @@ int main (int argc, char *argv[]) {
         if(i<0) break;
         insere_final(cabecalho, i);
     }
-    printf("%s\n",argv[1]);
-    bubbleSort(cabecalho,1);
+    c = getopt (argc, argv, "rd");
+
+    bubbleSort(cabecalho,c);
+
     imprime_lista(cabecalho);
+
     printf("\n");
+
     free (cabecalho);
 } /* fim-main */
 
