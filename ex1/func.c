@@ -29,11 +29,19 @@ int eConvexo(quadrado quad){
 	return resultado;
 }
 
+double modulo(double num){
+	if(num<0){
+		num = num*(-1);
+	}
+	return num;
+}
+
 double calcArea(quadrado quad){
 	double area = 0;
 	double determinante;
-	determinante = abs(calcDeterminante(quad.i,quad.j,quad.k));
-	determinante = determinante + abs(calcDeterminante(quad.i,quad.l,quad.k));
+	determinante = modulo(calcDeterminante(quad.i,quad.j,quad.k));
+	determinante = determinante + modulo(calcDeterminante(quad.i,quad.l,quad.k));
 	area = determinante/2;
 	return area;
 }
+

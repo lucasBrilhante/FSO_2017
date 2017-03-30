@@ -1,21 +1,19 @@
-#include <stdio.h>
 #include <math.h>
-
+#include <stdio.h>
 #include "estruturas.h"
 #include "func.h"
+#include "io.h"
 
 #define PI 3.14159265
 
 int main(){
-	quadrado q;
-	scanf("%lf%lf",&q.i.x, &q.i.y);
-	scanf("%lf%lf",&q.j.x, &q.j.y);
-	scanf("%lf%lf",&q.k.x, &q.k.y);
-	scanf("%lf%lf",&q.l.x, &q.l.y);
+	quadrado q = getInput();
+	double result;
 
 	if(eConvexo(q) == 0){
+		result = calcArea(q);
 		printf("É convexo\n");
-		printf("Area:%lf.\n",calcArea(q));
+		printf("Area:%.2lf\n",result);
 	}else{
 		printf("Não é convexo\n");
 	}
