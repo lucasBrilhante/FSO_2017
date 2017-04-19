@@ -20,16 +20,40 @@ void SleepFor (unsigned int secs) {
     unsigned int retTime = time(0) + secs;   // Get finishing time.
     while (time(0) < retTime);               // Loop until it arrives.
 }
-void processoPai(){
-     char str_recebida[BUFFER];
- 
-    /* No filho, vamos ler. Então vamos fechar a entrada de ESCRITA do pipe */
-    close(pipe_child1[1]);
- 
-    /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
-    read(pipe_child1[0], str_recebida, sizeof(str_recebida));
- 
-    printf("String enviada pelo filho no Pipe : '%s'\n", str_recebida);
+int tempoFinal(struct timeval inicio){
+    struct timeval final;
+    
+    gettimeofday(&final, NULL);
+
+    int segundos = (int) final.tv_sec - inicio.tv_sec;
+    
+    return segundos;    
+}
+void processoPai(struct timeval inicio){
+
+    char str_recebida[BUFFER];
+    FILE *f = fopen("output.txt", "w");
+    if (f == NULL)
+    {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+    while(tempoFinal(inicio) < 30){
+        /* No filho, vamos ler. Então vamos fechar a entrada de ESCRITA do pipe */
+        close(pipe_child1[1]);
+     
+        /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
+        read(pipe_child1[0], str_recebida, sizeof(str_recebida));
+        if(strcmp(str_recebida, "")){
+            //printf("String enviada pelo filho no Pipe : '%s'\n", str_recebida);
+            fprintf(f, "%s\n", str_recebida);
+        }
+
+        /* print some text */
+        //const char *text = "Write this to the file";
+        
+    }
+    fclose(f);
 }
 void processoPreg(){
     struct timeval inicio, final;
@@ -61,10 +85,8 @@ void processoPreg(){
     close(pipe_child1[0]);
 
     char str[BUFFER];
-    sprintf(str,"filho preguiçoso: %d:",minutos);//,minutos,segundos%60,milisegundos);
-    sprintf(str,"%d:",segundos%60);
-    sprintf(str,"%d",milisegundos);
-    printf("String enviada para pai no Pipe: '%s'", str);
+    sprintf(str,"filho preguiçoso: %d:%d:%d",minutos,segundos%60,milisegundos);
+    //printf("String enviada para pai no Pipe: '%s'", str);
 
     /* Escrevendo a string no pipe */
     write(pipe_child1[1], str, sizeof(str) + 1);
@@ -97,15 +119,7 @@ void processoPreg(){
     printf("%d:%d:%d mensagem: <%s>\n",minutos,segundos%60,milisegundos,buff); 
 }*/
 
-int tempoFinal(struct timeval inicio){
-    struct timeval final;
-    
-    gettimeofday(&final, NULL);
 
-    int segundos = (int) final.tv_sec - inicio.tv_sec;
-    
-    return segundos;    
-}
 int main() {
 
     /*--------------setup---------------------*/
@@ -158,11 +172,11 @@ int main() {
     printf("filho p pai id: %d\n",filhoP); 
     
     //loop processo pai
-    while(tempoFinal(inicio) < 30){
-        //Lê pipe dos filho
-        processoPai();
-        //Escreve no arquivo
-    }
+    
+    //Lê pipe dos filho
+    processoPai(inicio);
+    //Escreve no arquivo
+    
 
     //flag para os filhos terminarem
     *glob_var = 1;
