@@ -3,10 +3,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <sys/mman.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 
 #define BUFFER 256
@@ -29,6 +27,37 @@ int tempoFinal(struct timeval inicio){
     
     return segundos;    
 }
+/*char * getline(void) {
+    char * line = malloc(100), * linep = line;
+    size_t lenmax = 100, len = lenmax;
+    int c;
+
+    if(line == NULL)
+        return NULL;
+
+    for(;;) {
+        c = fgetc(stdin);
+        if(c == EOF)
+            break;
+
+        if(--len == 0) {
+            len = lenmax;
+            char * linen = realloc(linep, lenmax *= 2);
+
+            if(linen == NULL) {
+                free(linep);
+                return NULL;
+            }
+            line = linen + (line - linep);
+            linep = linen;
+        }
+
+        if((*line++ = c) == '\n')
+            break;
+    }
+    *line = '\0';
+    return linep;
+}*/
 void processoPai(struct timeval inicio){
 
     char str_recebida[BUFFER];
@@ -49,6 +78,14 @@ void processoPai(struct timeval inicio){
             fprintf(f, "%s\n", str_recebida);
         }
 
+        close(pipe_child2[1]);
+     
+        /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
+        read(pipe_child2[0], str_recebida, sizeof(str_recebida));
+        if(strcmp(str_recebida, "")){
+            //printf("String enviada pelo filho no Pipe : '%s'\n", str_recebida);
+            fprintf(f, "%s\n", str_recebida);
+        }
         /* print some text */
         //const char *text = "Write this to the file";
         
@@ -57,67 +94,83 @@ void processoPai(struct timeval inicio){
 }
 void processoPreg(){
     struct timeval inicio, final;
-
+    int count = 0;
     while(*glob_var == 0){
-    //começa o tempo
-    gettimeofday(&inicio, NULL);
-    //Escrever no pipe
-    
-    //exit(0);
+        count++;
+        //começa o tempo
+        gettimeofday(&inicio, NULL);
+        //Escrever no pipe
+        
+        //exit(0);
 
-    printf("oi\n"); 
-    int i = rand()%3;
-    //tempo esperado
-    SleepFor(i);
-    //finaliza contagem
-    gettimeofday(&final, NULL);
+        //printf("oi\n"); 
+        int i = rand()%3;
+        //tempo esperado
+        SleepFor(i);
+        //finaliza contagem
+        gettimeofday(&final, NULL);
 
-    /* --------Formatando tempo-----------*/
+        /* --------Formatando tempo-----------*/
 
-    int segundos = (int) final.tv_sec - inicio.tv_sec;
-    int milisegundosF = (int) final.tv_usec;
-    int milisegundosI = (int) inicio.tv_usec;
-    int milisegundos;
-    if(milisegundosI>milisegundosF) milisegundos = milisegundosI - milisegundosF;
-    else milisegundos = milisegundosF - milisegundosI;
-    int minutos = segundos/60;
-    /* ------------------------------------*/
-    close(pipe_child1[0]);
+        int segundos = (int) final.tv_sec - inicio.tv_sec;
+        int milisegundosF = (int) final.tv_usec;
+        int milisegundosI = (int) inicio.tv_usec;
+        int milisegundos;
+        if(milisegundosI>milisegundosF) milisegundos = milisegundosI - milisegundosF;
+        else milisegundos = milisegundosF - milisegundosI;
+        int minutos = segundos/60;
+        /* ------------------------------------*/
+        close(pipe_child1[0]);
 
-    char str[BUFFER];
-    sprintf(str,"filho preguiçoso: %d:%d:%d",minutos,segundos%60,milisegundos);
-    //printf("String enviada para pai no Pipe: '%s'", str);
+        char str[BUFFER];
+        sprintf(str,"%d:%d:%d:  Mensagem %d do filho dorminhoco",minutos,segundos%60,milisegundos,count);
+        //printf("String enviada para pai no Pipe: '%s'", str);
 
-    /* Escrevendo a string no pipe */
-    write(pipe_child1[1], str, sizeof(str) + 1);
-    //printf("filho preguiçoso: %d:%d:%d\n",minutos,segundos%60,milisegundos); 
+        /* Escrevendo a string no pipe */
+        write(pipe_child1[1], str, sizeof(str) + 1);
+        //printf("filho preguiçoso: %d:%d:%d\n",minutos,segundos%60,milisegundos); 
     }
 }
-/*void processoAtivo(){
+void processoAtivo(){
     struct timeval inicio, final;
-    
-    //começa o tempo
-    gettimeofday(&inicio, NULL);
-    
-    //tempo esperado
-    /*char buff[10];
-    getline(&buff, &sizeof(buff), stdin);
+    int count = 0;
+    while(*glob_var == 0){
+        count++;
+        //começa o tempo
+        gettimeofday(&inicio, NULL);
+        //Escrever no pipe
+        
+        //exit(0);
+        //char* buff = getline();
+        char buff[BUFFER];
 
-    //finaliza contagem
-    gettimeofday(&final, NULL);
+        scanf("%s", buff);
+        //finaliza contagem
+        gettimeofday(&final, NULL);
 
-    /* --------Formatando tempo-----------
+        /* --------Formatando tempo-----------*/
 
-    int segundos = (int) final.tv_sec - inicio.tv_sec;
-    int milisegundosF = (int) final.tv_usec;
-    int milisegundosI = (int) inicio.tv_usec;
-    int milisegundos;
-    if(milisegundosI>milisegundosF) milisegundos = milisegundosI - milisegundosF;
-    else milisegundos = milisegundosF - milisegundosI;
-    int minutos = segundos/60;
-    /* ------------------------------------
-    printf("%d:%d:%d mensagem: <%s>\n",minutos,segundos%60,milisegundos,buff); 
-}*/
+        int segundos = (int) final.tv_sec - inicio.tv_sec;
+        int milisegundosF = (int) final.tv_usec;
+        int milisegundosI = (int) inicio.tv_usec;
+        int milisegundos;
+        if(milisegundosI>milisegundosF) milisegundos = milisegundosI - milisegundosF;
+        else milisegundos = milisegundosF - milisegundosI;
+        int minutos = segundos/60;
+        /* ------------------------------------*/
+        close(pipe_child2[0]);
+
+        char str[BUFFER];
+        sprintf(str,"%d:%d:%d:  Mensagem %d do usuario: <%s>",minutos,segundos%60,milisegundos,count,buff);
+        printf("String enviada para pai no Pipe: '%s'\n", str);
+
+        /* Escrevendo a string no pipe */
+        write(pipe_child2[1], str, sizeof(str) + 1);
+        //printf("filho preguiçoso: %d:%d:%d\n",minutos,segundos%60,milisegundos); 
+
+        //tempo esperado
+    }
+}
 
 
 int main() {
@@ -163,7 +216,7 @@ int main() {
     
     if(filhoA != 0){
         printf("filho ativo id: %d\n",filhoA); 
-        //processoAtivo();
+        processoAtivo();
         return 0;
     }
 
