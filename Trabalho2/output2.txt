@@ -1,0 +1,11 @@
+0:5:531624:  Mensagem 1 do usuario: <AGORA VAI>
+{:5:531624:  Mensagem 1 do usuario: <AGORA VAI>
+0:5:13:  Mensagem 2 do usuario: <AGORA VAI>
+{:5:13:  Mensagem 2 do usuario: <AGORA VAI>
+0:5:8:  Mensagem 3 do usuario: <AGORA VAI>
+{:5:8:  Mensagem 3 do usuario: <AGORA VAI>
+0:5:8:  Mensagem 4 do usuario: <AGORA VAI>
+{:5:8:  Mensagem 4 do usuario: <AGORA VAI>
+0:5:7:  Mensagem 5 do usuario: <AGORA VAI>
+{:5:7:  Mensagem 5 do usuario: <AGORA VAI>
+0:5:8:  Mensagem 6 do usuario: <AGORA VAI>

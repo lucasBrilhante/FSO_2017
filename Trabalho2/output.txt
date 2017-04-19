@@ -1,0 +1,53 @@
+0:2:481426:  Mensagem 1 do filho dorminhoco
+
+
+0:4:481426:  Mensagem 3 do filho dorminhoco
+
+0:5:481427:  Mensagem 4 do filho dorminhoco
+
+0:6:481426:  Mensagem 5 do filho dorminhoco
+
+0:7:481426:  Mensagem 6 do filho dorminhoco
+
+
+0:8:481426:  Mensagem 8 do filho dorminhoco
+
+0:9:481427:  Mensagem 9 do filho dorminhoco
+
+0:11:481426:  Mensagem 10 do filho dorminhoco
+
+
+0:12:481426:  Mensagem 12 do filho dorminhoco
+
+
+
+0:13:481426:  Mensagem 15 do filho dorminhoco
+
+0:15:481426:  Mensagem 16 do filho dorminhoco
+
+0:17:481426:  Mensagem 17 do filho dorminhoco
+
+0:19:481426:  Mensagem 18 do filho dorminhoco
+
+0:20:481426:  Mensagem 19 do filho dorminhoco
+
+0:21:481426:  Mensagem 20 do filho dorminhoco
+
+
+0:23:481427:  Mensagem 22 do filho dorminhoco
+
+0:25:481426:  Mensagem 23 do filho dorminhoco
+
+
+
+
+0:26:481426:  Mensagem 27 do filho dorminhoco
+
+
+
+0:28:481426:  Mensagem 30 do filho dorminhoco
+
+0:29:481427:  Mensagem 31 do filho dorminhoco
+
+
+0:30:481426:  Mensagem 33 do filho dorminhoco
