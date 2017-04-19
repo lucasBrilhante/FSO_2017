@@ -1,53 +1,67 @@
-0:2:481426:  Mensagem 1 do filho dorminhoco
-
-
-0:4:481426:  Mensagem 3 do filho dorminhoco
-
-0:5:481427:  Mensagem 4 do filho dorminhoco
-
-0:6:481426:  Mensagem 5 do filho dorminhoco
-
-0:7:481426:  Mensagem 6 do filho dorminhoco
-
-
-0:8:481426:  Mensagem 8 do filho dorminhoco
-
-0:9:481427:  Mensagem 9 do filho dorminhoco
-
-0:11:481426:  Mensagem 10 do filho dorminhoco
-
-
-0:12:481426:  Mensagem 12 do filho dorminhoco
-
-
-
-0:13:481426:  Mensagem 15 do filho dorminhoco
-
-0:15:481426:  Mensagem 16 do filho dorminhoco
-
-0:17:481426:  Mensagem 17 do filho dorminhoco
-
-0:19:481426:  Mensagem 18 do filho dorminhoco
-
-0:20:481426:  Mensagem 19 do filho dorminhoco
-
-0:21:481426:  Mensagem 20 do filho dorminhoco
-
-
-0:23:481427:  Mensagem 22 do filho dorminhoco
-
-0:25:481426:  Mensagem 23 do filho dorminhoco
+0:0:53:  Mensagem 1 do filho dorminhoco
 
 
 
 
-0:26:481426:  Mensagem 27 do filho dorminhoco
+
+0:2:191:  Mensagem 6 do filho dorminhoco
+
+0:3:353:  Mensagem 7 do filho dorminhoco
+
+0:5:514:  Mensagem 8 do filho dorminhoco
+
+0:7:806556:  Mensagem 1 do usuario: <asdasdasdasdasdasdadas>
+�:7:806556:  Mensagem 1 do usuario: <asdasdasdasdasdasdadas>
+0:7:670:  Mensagem 9 do filho dorminhoco
+
+0:9:841:  Mensagem 10 do filho dorminhoco
 
 
 
-0:28:481426:  Mensagem 30 do filho dorminhoco
-
-0:29:481427:  Mensagem 31 do filho dorminhoco
 
 
-0:30:481426:  Mensagem 33 do filho dorminhoco
+
+0:10:1046:  Mensagem 16 do filho dorminhoco
+
+0:11:1132:  Mensagem 17 do filho dorminhoco
+
+0:12:1266:  Mensagem 18 do filho dorminhoco
+
+
+0:13:1416:  Mensagem 20 do filho dorminhoco
+
+
+
+0:14:1563:  Mensagem 23 do filho dorminhoco
+
+0:15:1663:  Mensagem 24 do filho dorminhoco
+
+
+0:17:1813:  Mensagem 26 do filho dorminhoco
+
+
+
+
+0:19:1993:  Mensagem 30 do filho dorminhoco
+
+
+0:21:2178:  Mensagem 32 do filho dorminhoco
+
+
+
+0:22:2362:  Mensagem 35 do filho dorminhoco
+
+
+0:23:2529:  Mensagem 37 do filho dorminhoco
+
+0:18:738320:  Mensagem 2 do usuario: <asodasdok>
+�:18:738320:  Mensagem 2 do usuario: <asodasdok>
+0:25:2689:  Mensagem 38 do filho dorminhoco
+
+0:27:2870:  Mensagem 39 do filho dorminhoco
+
+0:28:3045:  Mensagem 40 do filho dorminhoco
+
+0:3:78629:  Mensagem 3 do usuario: <kkkkkkkkkkk>
+�:3:78629:  Mensagem 3 do usuario: <kkkkkkkkkkk>
+0:30:3226:  Mensagem 41 do filho dorminhoco

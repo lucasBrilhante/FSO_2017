@@ -73,7 +73,7 @@ void processoPai(struct timeval inicio){
             printf("Select failed.\n");
         else if(retval)
         {
-           printf("Exite pelo menos um pipe ready %d.\n",retval);
+           //printf("Exite pelo menos um pipe ready %d.\n",retval);
 
             
             if (FD_ISSET(pipe_child1[0], &read_set)){
@@ -83,7 +83,7 @@ void processoPai(struct timeval inicio){
                 /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
                 read(pipe_child1[0], str_recebida, sizeof(str_recebida));
                 //if(strcmp(str_recebida, "")){
-                printf("String enviada pelo filho preg no Pipe : '%s'\n", str_recebida);
+                //printf("String enviada pelo filho preg no Pipe : '%s'\n", str_recebida);
                 fprintf(f, "%s\n", str_recebida);
                 //}
             }
@@ -91,7 +91,7 @@ void processoPai(struct timeval inicio){
                 /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
                 read(pipe_child2[0], str_recebida2, sizeof(str_recebida2));
                 //if(strcmp(str_recebida2, "")){
-                printf("String enviada pelo filho ativo no Pipe : '%s'\n", str_recebida2);
+                //printf("String enviada pelo filho ativo no Pipe : '%s'\n", str_recebida2);
                 fprintf(f, "%s\n", str_recebida2);
                 //}
             }           
@@ -112,6 +112,7 @@ void processoPai(struct timeval inicio){
         //const char *text = "Write this to the file";
         
     }
+    fflush(f);
     fclose(f);
 }
 void processoPreg(struct timeval inicio){
@@ -119,16 +120,7 @@ void processoPreg(struct timeval inicio){
     int count = 0;
     while(*glob_var == 0){
         count++;
-        //começa o tempo
-        //gettimeofday(&inicio, NULL);
-        //Escrever no pipe
-        
-        //exit(0);
 
-        //printf("oi\n"); 
-        int i = rand()%3;
-        //tempo esperado
-        SleepFor(i);
         //finaliza contagem
         gettimeofday(&final, NULL);
 
@@ -145,11 +137,13 @@ void processoPreg(struct timeval inicio){
 
         char str[BUFFER];
         sprintf(str,"%d:%d:%d:  Mensagem %d do filho dorminhoco",minutos,segundos%60,milisegundos,count);
-        //printf("String enviada para pai no Pipe: '%s'", str);
 
         /* Escrevendo a string no pipe */
         write(pipe_child1[1], str, sizeof(str) + 1);
         //printf("filho preguiçoso: %d:%d:%d\n",minutos,segundos%60,milisegundos); 
+        int i = rand()%3;
+        //tempo esperado
+        sleep(i);
     }
 }
 void processoAtivo(struct timeval inicio){
@@ -164,7 +158,6 @@ void processoAtivo(struct timeval inicio){
         //exit(0);
         //char* buff = getline();
         char buff[BUFFER];
-        SleepFor(5);
         //buff[0] = ' ';
         //printf("Insira a mensagem a qual deseja enviar.\n");
         fflush(stdin);
@@ -181,7 +174,8 @@ void processoAtivo(struct timeval inicio){
         int milisegundos;
         if(milisegundosI>milisegundosF) milisegundos = milisegundosI - milisegundosF;
         else milisegundos = milisegundosF - milisegundosI;
-        int minutos = segundos/60;
+        int minutos = 0;
+        minutos = segundos/60;
         /* ------------------------------------*/
         close(pipe_child2[0]);
 
