@@ -1,0 +1,20 @@
+[produtor]: numero gerado: 1804289383
+
+[consumo a]: numero lido: 1804289383
+
+[produtor]: numero gerado: 846930886
+
+[consumo b]: numero lido: 846930886
+
+[produtor]: numero gerado: 1681692777
+
+[consumo a]: numero lido: 1681692777
+
+[produtor]: numero gerado: 1714636915
+
+[consumo b]: numero lido: 1714636915
+
+[produtor]: numero gerado: 1957747793
+
+[consumo a]: numero lido: 1957747793
+

@@ -28,7 +28,7 @@ int tempoFinal(struct timeval inicio){
     return segundos;    
 }
 
-int get_largest_file_descriptor(int pipe_child1[], int pipe_child2[]){
+int maiorPipe(int pipe_child1[], int pipe_child2[]){
   int largest;
 
   largest = pipe_child1[0];
@@ -49,7 +49,8 @@ void processoPai(struct timeval inicio){
     int retval;
     char str_recebida[BUFFER];
     char str_recebida2[BUFFER];
-    
+    close(pipe_child1[1]);
+    close(pipe_child2[1]);
     FILE *f = fopen("output.txt", "w");
 
     if (f == NULL)
@@ -58,15 +59,14 @@ void processoPai(struct timeval inicio){
         exit(1);
     }
     while(tempoFinal(inicio) < 30){
-        close(pipe_child1[1]);
-        close(pipe_child2[1]);
+        
 
         FD_ZERO(&read_set);
         FD_SET(pipe_child1[0], &read_set);
         FD_SET(pipe_child2[0], &read_set);
         tv.tv_sec = 6;  
         tv.tv_usec = 0;
-        retval = select(get_largest_file_descriptor(pipe_child1,pipe_child2)+1, &read_set, NULL, NULL, &tv);
+        retval = select(maiorPipe(pipe_child1,pipe_child2)+1, &read_set, NULL, NULL, &tv);
 
         
         if(retval == -1)
@@ -78,14 +78,13 @@ void processoPai(struct timeval inicio){
             
             if (FD_ISSET(pipe_child1[0], &read_set)){
                 /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
-                
-     
                 /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
                 read(pipe_child1[0], str_recebida, sizeof(str_recebida));
                 //if(strcmp(str_recebida, "")){
                 //printf("String enviada pelo filho preg no Pipe : '%s'\n", str_recebida);
-                fprintf(f, "%s\n", str_recebida);
-                //}
+                if(strcmp(str_recebida,"")){
+	                fprintf(f, "%s\n", str_recebida);
+                }
             }
             if (FD_ISSET(pipe_child2[0], &read_set)){
                 /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
@@ -96,54 +95,57 @@ void processoPai(struct timeval inicio){
                 //}
             }           
         }
-        else printf("No data written to pipe in 6 last seconds.\n");
-
-
-
-        //select(2, &fds, NULL, NULL, NULL);
-        /* No filho, vamos ler. Então vamos fechar a entrada de ESCRITA do pipe */
-        
-        
-        
-     
-        /* Lendo o que foi escrito no pipe, e armazenando isso em 'str_recebida' */
-        
-        /* print some text */
-        //const char *text = "Write this to the file";
-        
+        else printf("No data written to pipe in 6 last seconds.\n");        
     }
     fflush(f);
     fclose(f);
 }
 void processoPreg(struct timeval inicio){
+    close(pipe_child1[0]);
     struct timeval final;
+    fd_set write_set;
+    FD_ZERO(&write_set); 
+    int retval;
     int count = 0;
     while(*glob_var == 0){
+        
+        FD_SET(pipe_child1[1], &write_set);
         count++;
+         
 
-        //finaliza contagem
-        gettimeofday(&final, NULL);
+        retval = select(pipe_child1[1]+1,NULL,&write_set, NULL, NULL);
+         
 
-        /* --------Formatando tempo-----------*/
-        int segundos = (int) final.tv_sec - inicio.tv_sec;
-        int milisegundosF = (int) final.tv_usec;
-        int milisegundosI = (int) inicio.tv_usec;
-        int milisegundos;
-        if(milisegundosI>milisegundosF) milisegundos = milisegundosI - milisegundosF;
-        else milisegundos = milisegundosF - milisegundosI;
-        int minutos = segundos/60;
-        /* ------------------------------------*/
-        close(pipe_child1[0]);
+        if(retval == -1)
+            printf("Select failed.\n");
+        else if(retval)
+        {
+               
 
-        char str[BUFFER];
-        sprintf(str,"%d:%d:%d:  Mensagem %d do filho dorminhoco",minutos,segundos%60,milisegundos,count);
+            //finaliza contagem
+            gettimeofday(&final, NULL);
 
-        /* Escrevendo a string no pipe */
-        write(pipe_child1[1], str, sizeof(str) + 1);
-        //printf("filho preguiçoso: %d:%d:%d\n",minutos,segundos%60,milisegundos); 
-        int i = rand()%3;
-        //tempo esperado
-        sleep(i);
+            /* --------Formatando tempo-----------*/
+            int segundos = (int) final.tv_sec - inicio.tv_sec;
+            int milisegundosF = (int) final.tv_usec;
+            int milisegundosI = (int) inicio.tv_usec;
+            int milisegundos;
+            if(milisegundosI>milisegundosF) milisegundos = milisegundosI - milisegundosF;
+            else milisegundos = milisegundosF - milisegundosI;
+            int minutos = segundos/60;
+            /* ------------------------------------*/
+            
+            //fflush(stdin);
+            char str[BUFFER] = "";
+            sprintf(str,"%d:%d:%d:  Mensagem %d do filho dorminhoco",minutos,segundos%60,milisegundos,count);
+
+            /* Escrevendo a string no pipe */
+            write(pipe_child1[1], str, sizeof(str) + 1);
+            //printf("Escrevi\n"); 
+            int i = rand()%3;
+            //tempo esperado
+            sleep(i);
+        }
     }
 }
 void processoAtivo(struct timeval inicio){
@@ -157,7 +159,7 @@ void processoAtivo(struct timeval inicio){
         
         //exit(0);
         //char* buff = getline();
-        char buff[BUFFER];
+        char buff[BUFFER] = "";
         //buff[0] = ' ';
         //printf("Insira a mensagem a qual deseja enviar.\n");
         fflush(stdin);
