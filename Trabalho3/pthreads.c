@@ -15,15 +15,48 @@ sem_t countsem, spacesem;
 FILE *f;
 void *b[N];
 int in = 0, out = 0;
+int biggest1=0,biggest2=0;
+int smallest1=1749241873,smallest2=1749241873;
+int bufferCount=0;
 
-void intHandler() {
+
+
+void controller() {
     keepRunning = 0;
-    printf("I aint running\n");
+    char* str = "[aviso]: Termino solicitado. Aguardando threads...\n";
+    fprintf(f, "%s", str);
+
+    //Achando o maior de todos
+    int biggestOfAll;
+    int smallestOfAll;
+    if(biggest2 > biggest1){
+        biggestOfAll = biggest2;
+    }else{
+        biggestOfAll = biggest1;
+    }
+
+    if(smallest2 > smallest1) {
+        smallestOfAll = smallest2;
+    }else{
+        smallestOfAll = smallest1;
+    }
+    char str2[50];
+
+    sprintf(str2,"[aviso]: Maior numero gerado: %d\n",biggestOfAll);
+    fprintf(f, "%s", str2);
+
+    char str3[50];
+
+    sprintf(str3,"[aviso]: Menor numero gerado: %d\n",smallestOfAll);
+    fprintf(f, "%s", str3);
+
 }
+
 void init() {
   sem_init(&countsem, 0, 0);
   sem_init(&spacesem, 0, 50);
 }
+
 void enqueue(void *value){
  // wait if there is no space left:
     sem_wait( &spacesem );
@@ -31,7 +64,6 @@ void enqueue(void *value){
     pthread_mutex_lock(&lock);
     b[ (in++) & (N-1) ] = value;
     pthread_mutex_unlock(&lock);
-
 
     // increment the count of the number of items
     sem_post(&countsem);
@@ -54,15 +86,16 @@ void *dequeue(){
 void feeder() {
     int i;
     char str[50];
-    for(i=0;i<5;i++){
-        usleep(100);
+    while(keepRunning){
+        usleep(100000);
 
-        int counter = rand();
-        sprintf(str,"[produtor]: numero gerado: %d\n",counter);
+        int value = rand();
 
-        fprintf(f, "%s\n", str);
+        sprintf(str,"[produtor]: numero gerado: %d\n",value);
 
-        enqueue(&counter);
+        fprintf(f, "%s", str);
+
+        enqueue(&value);
 
 
     }
@@ -71,26 +104,36 @@ void eater() {
     int i;
     char str[50];
     int *value;
-    for(i=0;i<5;i++){
-        usleep(150);
+    while(keepRunning){
+
+        usleep(150000);
+        //read value
         value = dequeue();
+
+        if(*value > biggest1) biggest1 = *value;
+        if(*value < smallest1) smallest1 = *value;
+
         sprintf(str,"[consumo a]: numero lido: %d\n",*value);
 
-        fprintf(f, "%s\n", str);
-
-
+        fprintf(f, "%s", str);
     }
 }
 void eater2() {
     int i;
     char str[50];
     int *value;
-    for(i=0;i<5;i++){
-        usleep(150);
+    while(keepRunning){
+
+        usleep(150000);
+        //read value
         value = dequeue();
+
+        if(*value > biggest2) biggest2 = *value;
+        if(*value < smallest2) smallest2 = *value;
+
         sprintf(str,"[consumo b]: numero lido: %d\n",*value);
 
-        fprintf(f, "%s\n", str);
+        fprintf(f, "%s", str);
 
 
     }
@@ -118,15 +161,17 @@ void *threadSeparator(void *vargp)
     return NULL;
 }
   
-int main()
+int main(int argc, char *argv[])
 {
     int i = 0, err;
-    char fileName[50];
-    signal(SIGINT, intHandler);
+    char* fileName;
+    signal(SIGINT, controller);
 
-
-    printf("Digite o nome do arquivo:  ");
-    scanf("%s", fileName);
+    if(argc > 0){
+        fileName = argv[1];
+    }else{
+        fileName = "defaultName.txt";
+    }
 
     f = fopen(fileName, "w");
 
@@ -153,8 +198,8 @@ int main()
 
     while(keepRunning);
 
-    printf("Finalizando threads\n");
-
+    char* str = "[aviso]: Aplicacao encerrada.\n";
+    fprintf(f, "%s\n", str);
     //pthread_join(tid[0], NULL);
     //pthread_join(tid[1], NULL);
     //pthread_join(tid[1], NULL);
