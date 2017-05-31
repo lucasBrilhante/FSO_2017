@@ -16,7 +16,7 @@ FILE *f;
 void *b[N];
 int in = 0, out = 0;
 int biggest1=0,biggest2=0;
-int smallest1=1749241873,smallest2=1749241873;
+int smallest1=1749241873,smallest2=1749241873; //huge number
 int bufferCount=0;
 
 
@@ -25,6 +25,7 @@ void controller() {
     keepRunning = 0;
     char* str = "[aviso]: Termino solicitado. Aguardando threads...\n";
     fprintf(f, "%s", str);
+    printf("\n%s\n", str);
 
     //Achando o maior de todos
     int biggestOfAll;
@@ -40,16 +41,30 @@ void controller() {
     }else{
         smallestOfAll = smallest1;
     }
+    //Printando maior e menor
     char str2[50];
 
     sprintf(str2,"[aviso]: Maior numero gerado: %d\n",biggestOfAll);
     fprintf(f, "%s", str2);
+    printf("%s\n",str2);
 
     char str3[50];
 
     sprintf(str3,"[aviso]: Menor numero gerado: %d\n",smallestOfAll);
     fprintf(f, "%s", str3);
+    printf("%s\n",str3);
 
+    char str4[50];
+
+    sprintf(str4,"[aviso]: Maior ocupacao de buffer: %d\n",bufferCount);
+    fprintf(f, "%s", str4);
+    printf("%s\n",str4);
+
+    char* str5 = "[aviso]: Aplicacao encerrada.\n";
+    fprintf(f, "%s\n", str5);
+    printf("%s\n",str5);
+
+    fclose(f);
 }
 
 void init() {
@@ -67,6 +82,13 @@ void enqueue(void *value){
 
     // increment the count of the number of items
     sem_post(&countsem);
+    //verify if buffer bigger
+    int j;
+    sem_getvalue(&countsem,&j);
+    if(j > bufferCount){
+        bufferCount = j;
+    }
+
 }
 
 void *dequeue(){
@@ -82,14 +104,20 @@ void *dequeue(){
 
     return result;
 }
+int getRandomNumber(){
+    int value = rand();
+    int negative = rand()%2;
+    if(negative) value*=-1;
 
+    return value;
+}
 void feeder() {
     int i;
     char str[50];
     while(keepRunning){
         usleep(100000);
 
-        int value = rand();
+        int value = getRandomNumber();
 
         sprintf(str,"[produtor]: numero gerado: %d\n",value);
 
@@ -144,17 +172,14 @@ void *threadSeparator(void *vargp)
 
     if(pthread_equal(id,tid[0]))
     {
-        printf("First thread processing \n");
         feeder();
     }
     if(pthread_equal(id,tid[1]))
     {
-        printf("second thread processing\n");
         eater();
     }
     if(pthread_equal(id,tid[2]))
     {
-        printf("Third thread processing\n");
         eater2();
     }
 
@@ -167,17 +192,14 @@ int main(int argc, char *argv[])
     char* fileName;
     signal(SIGINT, controller);
 
-    if(argc > 0){
-        fileName = argv[1];
-    }else{
-        fileName = "defaultName.txt";
-    }
+    fileName = argv[1];
+    
 
     f = fopen(fileName, "w");
-
+    printf("Arquivo criando: %s\n", fileName);
     init();
 
-    printf("init mutex\n");
+    printf("Iniciando componentes\n");
 
     if (pthread_mutex_init(&lock, NULL) != 0)
     {
@@ -186,7 +208,7 @@ int main(int argc, char *argv[])
     }
 
 
-    printf("Iniciando threads\n");
+    printf("Iniciando threads\nDigite CTRL+C para terminar\n");
 
     while(i < 3)
     {
@@ -198,8 +220,7 @@ int main(int argc, char *argv[])
 
     while(keepRunning);
 
-    char* str = "[aviso]: Aplicacao encerrada.\n";
-    fprintf(f, "%s\n", str);
+
     //pthread_join(tid[0], NULL);
     //pthread_join(tid[1], NULL);
     //pthread_join(tid[1], NULL);
